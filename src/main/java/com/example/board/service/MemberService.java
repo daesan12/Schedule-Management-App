@@ -32,8 +32,8 @@ public class MemberService {
 
 
     public SignUpResponseDto signUp(String username, String password, String email) {
-
-        Member member = new Member(username,password,email);
+        String encodedPassword = securityConfig.encode(password);
+        Member member = new Member(username,encodedPassword,email);
 
         Member savedMember = memberRepository.save(member);
         return new SignUpResponseDto(savedMember.getId(),savedMember.getUsername(),savedMember.getEmail());
