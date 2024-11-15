@@ -1,92 +1,159 @@
-﻿# ScheduleManagementApp
+| 기능               | Method | URL              | Request                                                                 | Response                                                                 | 상태코드                          | 제약사항                          |
+|--------------------|--------|------------------|-------------------------------------------------------------------------|--------------------------------------------------------------------------|-----------------------------------|-----------------------------------|
+| 게시글 생성        | POST   | /boards          | {<br>  "title": "게시글 제목",<br>  "contents": "게시글 내용",<br>  "username": "작성자 이름"<br>} | {<br>  "id": "게시글 ID",<br>  "title": "게시글 제목",<br>  "contents": "게시글 내용",<br>  "username": "작성자 이름"<br>} | - 201 게시글 생성 성공<br>- 400 요청 실패 | - 제목은 필수 값<br>- 내용은 1000자 이내 |
+| 게시글 전체 조회   | GET    | /boards          | 없음                                                                    | [{<br>  "id": "게시글 ID",<br>  "title": "게시글 제목",<br>  "contents": "게시글 내용",<br>  "username": "작성자 이름"<br>}, ...] | - 200 정상 조회                  | 없음                              |
+| 게시글 단건 조회   | GET    | /boards/{id}     | 요청 param<br>- id                                                     | {<br>  "id": "게시글 ID",<br>  "title": "게시글 제목",<br>  "contents": "게시글 내용",<br>  "username": "작성자 이름",<br>  "age": "작성자 나이"<br>} | - 200 정상 조회<br>- 404 게시글 미존재 | 없음                              |
+| 게시글 삭제        | DELETE | /boards/{id}     | 없음                                                                    | 없음                                                                     | - 200 삭제 성공<br>- 404 게시글 미존재 | 없음                              |
+| 회원가입           | POST   | /members/signup   | {<br>  "username": "사용자명",<br>  "password": "비밀번호",<br>  "age": "나이"<br>} | {<br>  "id": "회원 ID",<br>  "username": "사용자명",<br>  "age": "나이"<br>} | - 201 회원가입 성공<br>- 400 요청 실패 | - 사용자명 중복 불가<br>- 비밀번호 필수 |
+| 회원 단건 조회     | GET    | /members/{id}     | 요청 param<br>- id                                                     | {<br>  "id": "회원 ID",<br>  "username": "사용자명",<br>  "age": "나이"<br>} | - 200 정상 조회<br>- 404 회원 미존재 | 없음                              |
+| 비밀번호 수정      | PATCH  | /members/{id}     | {<br>  "oldPassword": "기존 비밀번호",<br>  "newPassword": "새 비밀번호"<br>} | 없음                                                                     | - 200 수정 성공<br>- 400 요청 실패<br>- 404 회원 미존재 | - 기존 비밀번호가 일치해야 수정 가능 |
 
-# 일정 관리 앱 API 설계문서
 
-## API 목록
+# API 상세 정보
 
-| **기능**               | **Method** | **URL**                                   | **Request**               | **Response**               | **상태코드**                          | **제약사항**                          |
-|------------------------|------------|-------------------------------------------|---------------------------|----------------------------|---------------------------------------|---------------------------------------|
-| 일정 생성              | POST       | /schedules                                | {<br>  "password": "1234",<br>  "work": "일정",<br>  "userId": "유저 아이디",<br>  "userName": "유저 이름",<br>  "schedulesDate": "19990510"<br>} | 200 OK                     | - 200 정상 등록 <br> - 400 등록 실패 | - 비밀번호, 일정은 필수값 <br> - 일정은 200자 이내 <br> - userinfo 테이블에 유저 아이디가 존재해야 일정 생성 가능 |
-| 회원가입              | POST       | /Schedules/create-user                    | {<br>  "userId": "유저아이디",<br>  "userName": "유저 이름",<br>  "email": "email@Naver.com"<br>} | 201 CREATED                | - 201 정상 등록                     | - 유저 아이디 중복 불가 <br> - 이메일 중복 불가 |
-| 일정 단건 조회        | GET        | /schedules/{scheduleId}                  | 요청 param <br> - id      | {<br>  "id": 20,<br>  "userId": "1",<br>  "work": "회식112",<br>  "userName": "장대산1",<br>  "schedulesDate": "1999-05-10",<br>  "createdDate": "2024-11-08 03:30:20",<br>  "modifiedDate": "2024-11-08 03:30:20"<br>} | - 200 정상 조회 <br> - 400 요청 실패 |                                       |
-| 일정 이름 또는 수정일로 조회 (페이징) | GET | /Schedules?userName=유저이름&modifiedDate=2024-11-08&page=3&size=10 | 요청 param <br> userId, userName, page: 페이지 번호, size: 페이지 사이즈 | [<br>{<br>  "id": 20,<br>  "userId": "1",<br>  "work": "회식112",<br>  "userName": "장대산1",<br>  "schedulesDate": "1999-05-10",<br>  "createdDate": "2024-11-08 03:30:20",<br>  "modifiedDate": "2024-11-08 03:30:20"<br>},<br>{<br>  "id": 21,<br>  "userId": "1",<br>  "work": "회식112",<br>  "userName": "장대산1",<br>  "schedulesDate": "1999-05-10",<br>  "createdDate": "2024-11-08 03:33:13",<br>  "modifiedDate": "2024-11-08 03:33:13"<br>},<br>{<br>  "id": 22,<br>  "userId": "1",<br>  "work": "회식112",<br>  "userName": "장대산1",<br>  "schedulesDate": "1999-05-10",<br>  "createdDate": "2024-11-08 03:35:09",<br>  "modifiedDate": "2024-11-08 03:35:09"<br>}<br>] | - 200 정상 조회 <br> - 400 요청 실패 | param 필수 아님 <br> 아무것도 적지 않을 시 전체 조회 |
-| 일정 수정              | PATCH      | /Schedules/{id}                          | {<br>  "password": "123",<br>  "work": "일정수정",<br>  "userName": "수정이름"<br>} | {<br>  "id": 9,<br>  "userId": "1",<br>  "work": "일정수정",<br>  "userName": "수정이름",<br>  "schedulesDate": "2024-10-29",<br>  "createdDate": "2024-11-07 13:22:12",<br>  "modifiedDate": "2024-11-08 03:11:42"<br>} | - 200 정상 수정 <br> - 400 요청 실패 <br> - 404 존재하지 않는 id로 시도 | - 비밀번호가 일치해야 수정 가능 <br> - 할일 200자 이내 |
-| 일정 삭제              | DELETE     | /schedules/{id}                          | {<br>  "password": "1234"<br>} | 200 OK                     | - 200 정상 삭제 <br> - 400 요청 실패 <br> - 404 존재하지 않는 id로 시도 | - 비밀번호가 일치해야 삭제 가능 |
-
-## API 세부 정보
-
-### 1. 일정 생성
-- **Method**: POST
-- **URL**: `/schedules`
-- **Request Body**:
+### 1. 게시글 생성- **Method**: POST
+- **URL**: `/boards`- **Request Body**:
     ```json
     {
-        "id": "1",
-        "userId": "qwe123",
-        "scheduleDate": "2024-10-29 18:30:42",
-        "work": "회식"
+        "title": "게시글 제목",
+        "contents": "게시글 내용",
+        "username": "작성자 이름"
     }
     ```
-- **Response**: (등록 응답 정보)
-
----
-
-### 2. 회원가입
-- **Method**: POST
-- **URL**: `http://localhost:8080/Schedules/create-user`
-- **Request Body**:
+- **Response**:
     ```json
     {
-        "userId": "1",
-        "userName": "테스트1",
-        "email": "1@Naver.com"
+        "id": "게시글 ID",
+        "title": "게시글 제목",
+        "contents": "게시글 내용",
+        "username": "작성자 이름"
     }
     ```
-- **Response**: (응답 정보)
+- **Status Code**: 
+  - 201: 게시글 생성 성공
+  - 400: 요청 실패
+- **제약사항**: 
+  - 제목은 필수 값
+  - 내용은 1000자 이내
 
 ---
 
-### 3. 일정 이름 또는 수정일로 조회
-- **Method**: GET
-- **URL**: (URL 입력 필요)
-- **Request**: (요청 파라미터 입력 필요)
-- **Response**: (응답 정보)
+### 2. 게시글 전체 조회- **Method**: GET
+- **URL**: `/boards`- **Request Parameter**: 없음
+- **Response**:
+    ```json
+    [
+        {
+            "id": "게시글 ID",
+            "title": "게시글 제목",
+            "contents": "게시글 내용",
+            "username": "작성자 이름"
+        },
+        {
+            "id": "게시글 ID",
+            "title": "게시글 제목",
+            "contents": "게시글 내용",
+            "username": "작성자 이름"
+        }
+    ]
+    ```
+- **Status Code**: 
+  - 200: 정상 조회
+- **제약사항**: 없음
 
 ---
 
-### 4. 일정 아이디로 조회
-- **Method**: GET
-- **URL**: (URL 입력 필요)
-- **Request**: (요청 파라미터 입력 필요)
-- **Response**: (응답 정보)
-
----
-
-### 5. 일정 수정
-- **Method**: PATCH
-- **URL**: `http://localhost:8080/Schedules/9`
-- **Request Body**:
+### 3. 게시글 단건 조회- **Method**: GET
+- **URL**: `/boards/{id}`- **Request Parameter**:
+    - `id`: 조회할 게시글 ID
+- **Response**:
     ```json
     {
-        "password": "123",  
-        "work": "미호크 잡기123", 
-        "userName": "김조로"  
+        "id": "게시글 ID",
+        "title": "게시글 제목",
+        "contents": "게시글 내용",
+        "username": "작성자 이름",
+        "age": "작성자 나이"
     }
     ```
-- **Response**: (수정 응답 정보)
+- **Status Code**: 
+  - 200: 정상 조회
+  - 404: 게시글이 존재하지 않음
+- **제약사항**: 없음
 
 ---
 
-### 6. 일정 단건 삭제
-- **Method**: DELETE
-- **URL**: `http://localhost:8080/Schedules/12`
-- **Request Body**:
+### 4. 게시글 삭제- **Method**: DELETE
+- **URL**: `/boards/{id}`- **Request Parameter**:
+    - `id`: 삭제할 게시글 ID
+- **Response**: 없음
+- **Status Code**: 
+  - 200: 삭제 성공
+  - 404: 게시글이 존재하지 않음
+- **제약사항**: 없음
+
+---
+
+### 5. 회원가입- **Method**: POST
+- **URL**: `/members/signup`- **Request Body**:
     ```json
     {
-        "password": "123"
+        "username": "사용자명",
+        "password": "비밀번호",
+        "age": "나이"
     }
     ```
-- **Response**: (단건 삭제 정보)
+- **Response**:
+    ```json
+    {
+        "id": "회원 ID",
+        "username": "사용자명",
+        "age": "나이"
+    }
+    ```
+- **Status Code**: 
+  - 201: 회원가입 성공
+  - 400: 요청 실패
+- **제약사항**: 
+  - 사용자명 중복 불가
+  - 비밀번호 필수
+
+---
+
+### 6. 회원 단건 조회- **Method**: GET
+- **URL**: `/members/{id}`- **Request Parameter**:
+    - `id`: 조회할 회원 ID
+- **Response**:
+    ```json
+    {
+        "id": "회원 ID",
+        "username": "사용자명",
+        "age": "나이"
+    }
+    ```
+- **Status Code**: 
+  - 200: 정상 조회
+  - 404: 회원이 존재하지 않음
+- **제약사항**: 없음
+
+---
+
+### 7. 비밀번호 수정- **Method**: PATCH
+- **URL**: `/members/{id}`- **Request Body**:
+    ```json
+    {
+        "oldPassword": "기존 비밀번호",
+        "newPassword": "새 비밀번호"
+    }
+    ```
+- **Response**: 없음
+- **Status Code**: 
+  - 200: 수정 성공
+  - 400: 요청 실패
+  - 404: 회원이 존재하지 않음
+- **제약사항**: 
+  - 기존 비밀번호가 일치해야 수정 가능
+
 
 ## 데이터베이스 테이블 생성 쿼리
 
