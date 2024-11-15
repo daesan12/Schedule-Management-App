@@ -18,8 +18,8 @@ public class ScheduleService {
     private final MemberRepository memberRepository;
     private final ScheduleRepository boardRepository;
 
-    public ScheduleResponseDto save(String title, String contents, String username) {
-        Member findMember = memberRepository.findMemberByUsernameOrElseThrow(username);
+    public ScheduleResponseDto save(String title, String contents, Long memberId) {
+        Member findMember = memberRepository.findByIdOrElseThrow (memberId);
 
         Schedule board = new Schedule(title, contents);
         board.setMember(findMember);

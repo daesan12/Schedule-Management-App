@@ -20,7 +20,7 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> save(@RequestBody CreateScheduleRequestDto requestDto) {
         ScheduleResponseDto boardResponseDto =
-                scheduleServiceService.save(requestDto.getTitle(), requestDto.getContents(), requestDto.getUsername());
+                scheduleServiceService.save(requestDto.getTitle(), requestDto.getContents(), requestDto.getMemberId());
         return new ResponseEntity<>(boardResponseDto, HttpStatus.CREATED);
     }
 

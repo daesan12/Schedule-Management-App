@@ -8,7 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member,Long> {
-    Optional<Member> findByEmail(String email);
+      Optional<Member> findByEmail(String email);
 
     Optional<Member> findMemberByUsername(String username);
 
@@ -25,4 +25,5 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
                         )
                 );
     }
+
 }

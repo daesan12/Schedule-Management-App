@@ -6,11 +6,11 @@ import lombok.Getter;
 public class CreateScheduleRequestDto {
     private final String title;
     private final String contents;
-    private final String username;
+    private final Long memberId;
 
-    public CreateScheduleRequestDto(String title, String contents, String username) {
+    public CreateScheduleRequestDto(String title, String contents, Long memberId) {
         this.title = title;
         this.contents = contents;
-        this.username = username;
+        this.memberId = memberId;
     }
 }

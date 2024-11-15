@@ -21,7 +21,6 @@ public class MemberService {
 
     public boolean validateUser(String email, String password) {
         Optional<Member> userOptional = memberRepository.findByEmail(email);
-
         if (userOptional.isPresent()) {
             Member user = userOptional.get();
             return securityConfig.matches(password, user.getPassword());
