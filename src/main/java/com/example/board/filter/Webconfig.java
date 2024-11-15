@@ -7,12 +7,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Webconfig {
-@Bean
+    @Bean
     public FilterRegistrationBean loginFilter() {
-    FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-    filterRegistrationBean.setFilter(new LoginFilter());
-    filterRegistrationBean.setOrder(1);
-    filterRegistrationBean.addUrlPatterns("/*");
-    return filterRegistrationBean;
-}
+        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
+        filterRegistrationBean.setFilter(new LoginFilter());
+        filterRegistrationBean.setOrder(1);
+        filterRegistrationBean.addUrlPatterns("/*");
+        return filterRegistrationBean;
+    }
 }

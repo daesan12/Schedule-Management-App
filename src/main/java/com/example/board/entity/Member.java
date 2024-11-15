@@ -6,23 +6,23 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name="member")
+@Table(name = "member")
 public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false, unique=true)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    public Member(){
+    public Member() {
 
     }
 

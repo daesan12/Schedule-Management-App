@@ -6,7 +6,7 @@ import lombok.Getter;
 public class ScheduleWithAgeResponseDto {
     private final String title;
     private final String contents;
-    private final  String email;
+    private final String email;
 
     public ScheduleWithAgeResponseDto(String title, String contents, String email) {
         this.title = title;

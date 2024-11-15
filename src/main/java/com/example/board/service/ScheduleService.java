@@ -19,14 +19,14 @@ public class ScheduleService {
     private final ScheduleRepository boardRepository;
 
     public ScheduleResponseDto save(String title, String contents, Long memberId) {
-        Member findMember = memberRepository.findByIdOrElseThrow (memberId);
+        Member findMember = memberRepository.findByIdOrElseThrow(memberId);
 
         Schedule board = new Schedule(title, contents);
         board.setMember(findMember);
 
 
         boardRepository.save(board);
-        return new ScheduleResponseDto(board.getId(),board.getTitle(),board.getContents());
+        return new ScheduleResponseDto(board.getId(), board.getTitle(), board.getContents());
     }
 
     public List<ScheduleResponseDto> findAll() {
@@ -40,7 +40,7 @@ public class ScheduleService {
     public ScheduleWithAgeResponseDto findById(Long id) {
         Schedule findBoard = boardRepository.findByIdOrElseThrow(id);
         Member writer = findBoard.getMember();
-        return new ScheduleWithAgeResponseDto(findBoard.getTitle(), findBoard.getContents(),writer.getEmail() );
+        return new ScheduleWithAgeResponseDto(findBoard.getTitle(), findBoard.getContents(), writer.getEmail());
     }
 
     public void delete(Long id) {

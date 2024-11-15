@@ -16,20 +16,20 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponseDto> signUp(@Valid  @RequestBody SignUpRequestDto requestDto) {
+    public ResponseEntity<SignUpResponseDto> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
         SignUpResponseDto signUpResponseDto =
                 memberService.signUp(
                         requestDto.getUsername(),
                         requestDto.getPassword(),
                         requestDto.getEmail());
-        return new ResponseEntity<>(signUpResponseDto,HttpStatus.CREATED);
+        return new ResponseEntity<>(signUpResponseDto, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(
             @RequestBody LoginRequestDto requestdto,
             HttpServletRequest request) {
-        System.out.println("이메일확인="+requestdto.getEmail()+"비번확인="+ requestdto.getPassword());
+        System.out.println("이메일확인=" + requestdto.getEmail() + "비번확인=" + requestdto.getPassword());
         if (memberService.validateUser(requestdto.getEmail(), requestdto.getPassword())) {
             // 세션에 사용자 정보 저장
             request.getSession().setAttribute("user", requestdto.getEmail());
@@ -42,14 +42,14 @@ public class MemberController {
     public ResponseEntity<MemberResponseDto> findById(@PathVariable Long id) {
         MemberResponseDto memberResponseDto = memberService.findById(id);
 
-        return new ResponseEntity<>(memberResponseDto,HttpStatus.OK);
+        return new ResponseEntity<>(memberResponseDto, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void>updatePassword(
+    public ResponseEntity<Void> updatePassword(
             @PathVariable Long id,
             @RequestBody UpdatePasswordRequestDto requestDto
-    ){
+    ) {
         memberService.updatePassword(id, requestDto.getOldPassword(), requestDto.getNewPassword());
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -32,16 +32,16 @@ public class MemberService {
 
     public SignUpResponseDto signUp(String username, String password, String email) {
         String encodedPassword = securityConfig.encode(password);
-        Member member = new Member(username,encodedPassword,email);
+        Member member = new Member(username, encodedPassword, email);
 
         Member savedMember = memberRepository.save(member);
-        return new SignUpResponseDto(savedMember.getId(),savedMember.getUsername(),savedMember.getEmail());
+        return new SignUpResponseDto(savedMember.getId(), savedMember.getUsername(), savedMember.getEmail());
     }
 
     public MemberResponseDto findById(Long id) {
         Optional<Member> optinalMember = memberRepository.findById(id);
-        if(optinalMember.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Does not exists id : "+ id);
+        if (optinalMember.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exists id : " + id);
         }
 
         Member findmember = optinalMember.get();
@@ -51,12 +51,12 @@ public class MemberService {
     @Transactional
     public void updatePassword(Long id, String oldPassword, String newPassword) {
 
-       Member findMember =  memberRepository.findByIdOrElseThrow(id);
+        Member findMember = memberRepository.findByIdOrElseThrow(id);
 
-       if(! findMember.getPassword().equals(oldPassword)){
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"비밀번호 불일치");
-       }
+        if (!findMember.getPassword().equals(oldPassword)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호 불일치");
+        }
 
-       findMember.updatePassword(newPassword);
+        findMember.updatePassword(newPassword);
     }
 }

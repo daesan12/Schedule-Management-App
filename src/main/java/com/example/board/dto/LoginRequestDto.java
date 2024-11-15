@@ -15,4 +15,3 @@ public class LoginRequestDto {
         this.password = password;
     }
 }
-"Feat 전역예외처리기 추가"

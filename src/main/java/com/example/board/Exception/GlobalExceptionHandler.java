@@ -10,15 +10,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GlobalExceptionHandler extends RuntimeException {
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-    Map<String, String> errors = new HashMap<>();
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
 
-    for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-      errors.put(error.getField(), error.getDefaultMessage());
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+
+        return errors;
     }
-
-    return errors;
-  }
 }
