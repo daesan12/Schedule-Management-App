@@ -1,5 +1,6 @@
 package com.example.board.service;
 
+import com.example.board.config.SecurityConfig;
 import com.example.board.dto.MemberResponseDto;
 import com.example.board.dto.SignUpResponseDto;
 import com.example.board.entity.Member;
@@ -16,7 +17,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final SecurityConfig securityConfig;
 
+    public boolean validateUser(String email, String password) {
+        Optional<Member> userOptional = memberRepository.findByEmail(email);
+
+        if (userOptional.isPresent()) {
+            Member user = userOptional.get();
+            return securityConfig.matches(password, user.getPassword());
+        }
+
+        return false;
+    }
 
 
     public SignUpResponseDto signUp(String username, String password, String email) {
@@ -24,7 +36,6 @@ public class MemberService {
         Member member = new Member(username,password,email);
 
         Member savedMember = memberRepository.save(member);
-
         return new SignUpResponseDto(savedMember.getId(),savedMember.getUsername(),savedMember.getEmail());
     }
 
